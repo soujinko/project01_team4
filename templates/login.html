@@ -3,12 +3,13 @@
     <head>
 
         <!-- Webpage Title -->
-        <title>Log In | SWEETER</title>
+        <title>Log In | STOCKCOIN</title>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
         <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-        <meta property="og:title" content="스위터 - 세상을 달달하게"/>
-        <meta property="og:description" content="mini project for Web Plus"/>
-        <meta property="og:image" content="{{ url_for('static', filename='ogimg.png') }}"/>
+{#        <meta property="og:title" content=""/>#}
+{#        <meta property="og:description" content=""/>#}
+{#        <meta property="og:image" content="{{ url_for('static', filename='ogimg.png') }}"/>#}
 
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -23,6 +24,23 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
         <style>
+            html, body {
+                background-color: rgb(239, 242, 249);;
+                height:100%
+
+            }
+            .wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+
+            .logo {
+                width: 170px;
+                padding: 15px 15px;
+                position: fixed;
+            }
 
         </style>
         <script>
@@ -155,10 +173,14 @@
 
     </head>
     <body>
+        <div class="logo" onclick="window.location.href='/'">
+            <img src="../static/logo.png" alt="">
+        </div>
 
-        <section class="section">
+        <div class="wrapper">
+             <section class="section" >
             <div class="container">
-                <div class="box" style="max-width: 480px;margin:auto">
+                <div class="box" style="width: 400px;">
                     <article class="media">
                         <div class="media-content">
                             <div class="content">
@@ -195,10 +217,10 @@
 
                                 </nav>
                                 <hr>
-                                <h4 class="mb-3">아직 회원이 아니라면</h4>
+                                <h4 class="mb-3" style="font-size: 13px">아직 회원이 아니라면</h4>
                                 <nav class="level is-mobile">
 
-                                    <button class="level-item button is-sparta is-outlined"
+                                    <button class="level-item button is-sparta is-outlined"  style="background-color: rgb(62, 68, 249); color: white"
                                             onclick="toggle_sign_up()">
                                         회원가입하기
                                     </button>
@@ -218,7 +240,7 @@
                                     </div>
                                 </div>
                                 <nav class="level is-mobile">
-                                    <button class="level-item button is-sparta" onclick="sign_up()">
+                                    <button class="level-item button is-sparta" style="background-color: rgb(62, 68, 249); color: white" onclick="sign_up()">
                                         회원가입
                                     </button>
                                     <button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
@@ -234,6 +256,8 @@
 
             </div>
         </section>
+        </div>
+
 
     </body>
 </html>
