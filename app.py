@@ -81,7 +81,7 @@ def get_card():
 def detail_get_card():
      return jsonify({"result": "success"})
 
-# 리뷰, 별점 저장 (엑셀 저장된 동일 db에 리뷰, 별점 항목 업데이트하여 정보 추가)
+# 리뷰, 별점 저장 (리뷰용 별도 db에 리뷰, 별점, 해당앱 이름, 아이디 저장)
 @app.route('/post_review', methods=['POST'])
 def post_review():
     return jsonify({"result": "success"})
