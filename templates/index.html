@@ -21,29 +21,67 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script>
-        let result = '{{ result|tojson }}'
-        console.log(result)
+
+        function review(){
+            alert('로그인 해주세요')
+            window.location.href='/login'
+            return
+        }
     </script>
+    <style>
+        html, body {
+                background-color: rgb(239, 242, 249);;
+                height:100%
+
+            }
+        .logo {
+                width: 170px;
+                padding: 15px 15px;
+                position: fixed;
+            }
+        .userbox {
+            margin: 20px;
+        }
+    </style>
 
     </head>
     <body>
 
-    <div>
-        {% for i in result %}
-        <div style="border: 2px solid; margin: 20px; width: 300px; padding: ">
-            {% if i.type == '코인거래소' %}
-            <img src="{{ i.image_url }}" alt="dd" onclick="">
-            {% else %}
-            <img src="{{ i.image_url }}" alt="dd" onclick="window.location.href='/detail?type_give=stock'">
-            {% endif %}
-
-            <div>앱 이름: {{ i.app_name }} </div>
-            <div>회사 이름: {{ i.company }} </div>
-            <div>타입: {{ i.type }}</div>
+        <div class="logo" onclick="window.location.href='/'">
+            <img src="../static/logo.png" alt="">
         </div>
-        {% endfor %}
 
-    </div>
+        <br>
+        <br>
+        {% if user_info %}
+            <div class="userbox">
+                <div>{{ user_info.username }}님, 금주 top3 앱입니다!</div>
+                <div style="border: 1px solid; width: 80%; height: 200px"></div>
+            </div>
+        {% endif %}
+        <div>
+            {% for i in result %}
+            <div style="border: 2px solid; margin: 20px; width: 300px; padding: ">
+                {% if i.type == '코인거래소' %}
+                <img src="{{ i.image_url }}" alt="dd" >
+                {% else %}
+                <img src="{{ i.image_url }}" alt="dd" >
+                {% endif %}
+
+                <div>앱 이름: {{ i.app_name }} </div>
+                <div>회사 이름: {{ i.company }} </div>
+                <div>타입: {{ i.type }}</div>
+
+                {% if user_info %}
+                <button onclick="">리뷰작성</button>
+                {% else %}
+                <button onclick="review()">리뷰작성</button>
+                {% endif %}
+
+            </div>
+            {% endfor %}
+
+        </div>
 
     </body>
 </html>
