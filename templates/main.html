@@ -21,15 +21,48 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script>
-
+        function sign_out() {
+                $.removeCookie('mytoken', {path: '/'});
+                alert('다시 로그인해주세요')
+                window.location.href = "/login"
+            }
     </script>
+    <style>
+        html, body {
+                background-color: rgb(239, 242, 249);;
+                height:100%
+
+            }
+        .logo {
+                width: 170px;
+                padding: 15px 15px;
+                position: fixed;
+            }
+    </style>
 
     </head>
     <body>
 
     <div>
+        <div class="logo" onclick="window.location.href='/'">
+            <img src="../static/logo.png" alt="">
+        </div>
+        <br>
+    <br>
+        {% if user_info %}
+        <div>안녕하세요 {{ user_info.username }}님!</div>
+        {% endif %}
+
+        <br>
+
         <button onclick="window.location.href='/getcard?type_give=coin'">coin</button>
         <button onclick="window.location.href='/getcard?type_give=stock'">stock</button>
+
+        {% if user_info %}
+            <button onclick="sign_out()">로그아웃</button>
+        {% else %}
+            <button onclick="window.location.href='/login'">로그인/회원가입</button>
+        {% endif %}
     </div>
 
     </body>
