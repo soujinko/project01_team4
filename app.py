@@ -14,16 +14,18 @@ db = client.dbsparta_week1
 # 메인페이지
 @app.route('/')
 def main():
-    return render_template('main.html')
-    # token_receive = request.cookies.get('mytoken')
-    # try:
-    #     payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-    #     user_info = db.users.find_one({'username': payload['id']})
-    #     return render_template('main.html', user_info=user_info)
-    # except jwt.ExpiredSignatureError:
-    #     return redirect(url_for('login', msg='로그인 시간이 만료되었습니다.'))
-    # except jwt.exceptions.DecodeError:
-    #     return redirect(url_for('login', msg='로그인 정보가 존재하지 않습니다.'))
+    token_receive = request.cookies.get('mytoken')
+    if token_receive is None:
+        return render_template('main.html')
+    else:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.users.find_one({'username': payload['id']})
+            return render_template('main.html', user_info=user_info)
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for('login', msg='로그인 시간이 만료되었습니다.'))
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for('login', msg='로그인 정보가 존재하지 않습니다.'))
 
 # 회원가입 로그인
 @app.route('/login')
@@ -68,13 +70,25 @@ def sign_in():
 @app.route('/getcard', methods=['GET'])
 def get_card():
     type_receive = request.args.get('type_give')
-    print(type_receive)
-    if type_receive == "coin":
-        result = list(db.applist.find({'type':'코인거래소'},{'_id':False}))
-        return render_template("index.html", result=result)
+    token_receive = request.cookies.get('mytoken')
+    if token_receive:
+        try:
+            if type_receive == "coin":
+                result = list(db.applist.find({'type': '코인거래소'}, {'_id': False}))
+            else:
+                result = list(db.applist.find({'type': '증권'}, {'_id': False}))
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.users.find_one({'username': payload['id']})
+            return render_template('index.html', user_info=user_info, result=result )
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for("main"))
     else:
-        result = list(db.applist.find({'type': '증권'}, {'_id': False}))
-        return render_template("index.html", result=result)
+        if type_receive == "coin":
+            result = list(db.applist.find({'type':'코인거래소'},{'_id':False}))
+            return render_template("index.html", result=result)
+        else:
+            result = list(db.applist.find({'type': '증권'}, {'_id': False}))
+            return render_template("index.html", result=result)
 
 # 디테일 페이지 1개카드 세부정보 찾기 (엑셀정보 내용, 리뷰,별점)
 @app.route('/detail_get_card', methods=['POST'])
