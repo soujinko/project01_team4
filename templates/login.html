@@ -25,7 +25,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
         <style>
             html, body {
-                background-color: rgb(239, 242, 249);;
+                background-color: black;
                 height:100%
 
             }
@@ -50,6 +50,8 @@
                 $('#help-id').toggleClass('is-hidden')
                 $('#help-password').toggleClass('is-hidden')
                 $('#div-sign-in-or-up').toggleClass('is-hidden')
+                $('#signin').toggleClass('is-hidden')
+                $('#signup').toggleClass('is-hidden')
             }
 
             function is_nickname(asValue){
@@ -174,23 +176,26 @@
     </head>
     <body>
         <div class="logo" onclick="window.location.href='/'">
-            <img src="../static/logo.png" alt="">
+            <img src="../static/logo2.png" alt="">
         </div>
 
         <div class="wrapper">
              <section class="section" >
             <div class="container">
-                <div class="box" style="width: 400px;">
+                <div class="box" style="border-radius: 0; width: 350px;">
                     <article class="media">
                         <div class="media-content">
                             <div class="content">
+                                <p id="signin" style="font-weight: bold; text-align: center; font-size: 20px">Sign in</p>
+                                <p id="signup" class="is-hidden" style="font-weight: bold; text-align: center; font-size: 20px">Sign up</p>
+
                                 <div class="field has-addons">
-                                    <div class="control has-icons-left" style="width:100%">
-                                        <input id="input-username" class="input" type="text" placeholder="아이디">
+                                    <div class="control has-icons-left" style=" width:100%">
+                                        <input style="border-radius: 0;" id="input-username" class="input" type="text" placeholder="아이디">
                                         <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
                                     </div>
                                     <div id="btn-check-dup" class="control is-hidden">
-                                        <button class="button is-sparta" onclick="check_dup()">중복확인</button>
+                                        <button style="border-radius: 0;" class="button is-sparta" onclick="check_dup()">중복확인</button>
                                     </div>
 
                                 </div>
@@ -199,7 +204,7 @@
 
                                 <div class="field">
                                     <div class="control has-icons-left">
-                                        <input id="input-password" class="input" type="password" placeholder="비밀번호">
+                                        <input style="border-radius: 0;"  id="input-password" class="input" type="password" placeholder="비밀번호">
                                         <span class="icon is-small is-left"><i class="fa fa-lock"></i></span>
                                     </div>
                                     <p id="help-password" class="help is-hidden">영문과 숫자 조합의 8-20자의 비밀번호를 설정해주세요. 특수문자(!@#$%^&*)도
@@ -211,7 +216,7 @@
                             </div>
                             <div id="div-sign-in-or-up" class="has-text-centered">
                                 <nav class="level is-mobile">
-                                    <button class="level-item button is-sparta" onclick="sign_in()">
+                                    <button style="border-radius: 0; background-color: black; color: white" class="level-item button is-sparta" onclick="sign_in()">
                                         로그인
                                     </button>
 
@@ -220,7 +225,7 @@
                                 <h4 class="mb-3" style="font-size: 13px">아직 회원이 아니라면</h4>
                                 <nav class="level is-mobile">
 
-                                    <button class="level-item button is-sparta is-outlined"  style="background-color: rgb(62, 68, 249); color: white"
+                                    <button class="level-item button is-sparta is-outlined"  style="background-color: #DBFC52; border-radius: 0;"
                                             onclick="toggle_sign_up()">
                                         회원가입하기
                                     </button>
@@ -240,10 +245,10 @@
                                     </div>
                                 </div>
                                 <nav class="level is-mobile">
-                                    <button class="level-item button is-sparta" style="background-color: rgb(62, 68, 249); color: white" onclick="sign_up()">
+                                    <button class="level-item button is-sparta" style="background-color: #DBFC52; border-radius: 0" onclick="sign_up()">
                                         회원가입
                                     </button>
-                                    <button class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
+                                    <button style="border-radius: 0; background-color: black; color: white" class="level-item button is-sparta is-outlined" onclick="toggle_sign_up()">
                                         취소
                                     </button>
                                 </nav>
