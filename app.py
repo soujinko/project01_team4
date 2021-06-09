@@ -75,20 +75,23 @@ def get_card():
         try:
             if type_receive == "coin":
                 result = list(db.applist.find({'type': '코인거래소'}, {'_id': False}))
+                bestapps = list(db.applist.find({'type': '코인거래소'}).sort("star", -1).limit(3))
             else:
                 result = list(db.applist.find({'type': '증권'}, {'_id': False}))
+                bestapps = list(db.applist.find({'type': '증권'}).sort("star", -1).limit(3))
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
             user_info = db.users.find_one({'username': payload['id']})
-            return render_template('index.html', user_info=user_info, result=result )
+
+            return render_template('index.html', user_info=user_info, result=result, type=type_receive, bestapps= bestapps)
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
             return redirect(url_for("main"))
     else:
         if type_receive == "coin":
             result = list(db.applist.find({'type':'코인거래소'},{'_id':False}))
-            return render_template("index.html", result=result)
+            return render_template("index.html", result=result , type=type_receive)
         else:
             result = list(db.applist.find({'type': '증권'}, {'_id': False}))
-            return render_template("index.html", result=result)
+            return render_template("index.html", result=result , type=type_receive)
 
 
 #리뷰정보 불러오기
