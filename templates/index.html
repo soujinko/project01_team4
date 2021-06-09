@@ -62,7 +62,7 @@
         .userbox {
             margin: 20px;
         }
-        #card {
+        .card {
             background-color: white;
             width: 250px;
             margin: 20px;
@@ -95,6 +95,15 @@
             border-bottom: 2px solid #DBFC52;
             z-index: 1;
         }
+        .userbox {
+            border: 0px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-left: 0;
+            background-color: #DBFC52;
+        }
     </style>
 
     </head>
@@ -114,37 +123,58 @@
 
         <br>
         <br>
+        <br>
+
         {% if user_info %}
+            <div style="color: white; text-align: center">{{ user_info.username }}님! 금주 베스트 {{ type }} 앱입니다
+            </div>
             <div class="userbox">
-                <div>{{ user_info.username }}님, 금주 top3 앱입니다!</div>
-                <div style="border: 1px solid; width: 80%; height: 200px"></div>
+                {% for app in bestapps %}
+                    {#리뷰정보 불러오기#}
+                    <div class="card" onclick="getreview('{{ app.app_name }}')" style="  ">
+                        <div class="container">
+                            <img src="{{ app.image_url }}" alt="dd">
+                            <div>앱 이름: {{ app.app_name }} </div>
+                            <div>회사 이름: {{ app.company }} </div>
+                            <div>타입: {{ app.type }}</div>
+
+                            {% if user_info %}
+                                <button onclick="">리뷰작성</button>
+                            {% else %}
+                                <button onclick="review()">리뷰작성</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+
             </div>
         {% endif %}
+
         <br>
         <br>
         <div>
             {% for i in result %}
 
-                 {#리뷰정보 불러오기#}
-            <div id="card" onclick="getreview('{{ i.app_name }}')" style="  ">
-            <div class="container">
-                {% if i.type == '코인거래소' %}
-                <img src="{{ i.image_url }}" alt="dd" >
-                {% else %}
-                <img src="{{ i.image_url }}" alt="dd" >
-                {% endif %}
+                {#리뷰정보 불러오기#}
+                <div class="card" onclick="getreview('{{ i.app_name }}')" style="  ">
+                    <div class="container">
+                        {% if i.type == '코인거래소' %}
+                            <img src="{{ i.image_url }}" alt="dd">
+                        {% else %}
+                            <img src="{{ i.image_url }}" alt="dd">
+                        {% endif %}
 
-                <div>앱 이름: {{ i.app_name }} </div>
-                <div>회사 이름: {{ i.company }} </div>
-                <div>타입: {{ i.type }}</div>
+                        <div>앱 이름: {{ i.app_name }} </div>
+                        <div>회사 이름: {{ i.company }} </div>
+                        <div>타입: {{ i.type }}</div>
 
-                {% if user_info %}
-                <button onclick="">리뷰작성</button>
-                {% else %}
-                <button onclick="review()">리뷰작성</button>
-                {% endif %}
-            </div>
-            </div>
+                        {% if user_info %}
+                            <button onclick="">리뷰작성</button>
+                        {% else %}
+                            <button onclick="review()">리뷰작성</button>
+                        {% endif %}
+                    </div>
+                </div>
             {% endfor %}
 
         </div>
