@@ -23,12 +23,12 @@
     <script>
         function sign_out() {
                 $.removeCookie('mytoken', {path: '/'});
-                alert('다시 로그인해주세요')
+                alert('로그아웃 되었습니다.')
                 window.location.href = "/login"
             }
     </script>
     <style>
-        body {
+        html , body {
             margin: 0;
             padding: 0;
             background-color: white;
@@ -41,23 +41,27 @@
             box-sizing: border-box;
             background-color: black;
             position: relative;
+            display: table;
+            table-layout: fixed;
+            overflow:hidden
         }
 
         .container {
-            margin: 0 auto 0 auto;
-            width: 100%;
+           /*margin: 0 auto 0 auto;*/
             height: 100%;
-            border: 2px solid red;
+            border: 0px solid red;
             box-sizing: border-box;
+            display: table-cell;
+
 
         }
 
         .login {
             position: absolute;
             right: 15px;
-            top: 8px;
             font-size: 15px;
             z-index: 1;
+            top: 8px;
         }
         .login:hover {
             position: absolute;
@@ -69,10 +73,25 @@
         }
 
         .login2  {
-            position: absolute;
+            position: relative;
+            font-size: 10px;
             left: 15px;
             top: 8px;
-            font-size: 15px;
+        }
+        .login3  {
+            position: absolute;
+            font-size: 10px;
+            left: 45%;
+            top: 8px;
+        }
+        .login4  {
+            position: absolute;
+            font-size: 10px;
+            left: 10px;
+            bottom: 15px;
+            writing-mode: vertical-lr;
+            transform: rotate(180deg);
+
         }
 
         .container2 .logo {
@@ -131,7 +150,7 @@
         }
 
         .line {
-            width: 25vw;
+            width: 22vw;
             height: 80vh;
             background: url('../static/line2.png') no-repeat;
             background-size: contain;
@@ -146,45 +165,42 @@
             top: 10%;
             right: 2%;
         }
+        .container2 a {
+            color: #DBFC52;
+            text-decoration: none;
+        }
+        .container2 a:hover {
+            color: #DBFC52;
+            text-decoration: none;
+            border-bottom: 2px solid #DBFC52;
+        }
 
     </style>
 
     </head>
     <body>
-{##}
-{#    <div>#}
-{#        <div class="logo" onclick="window.location.href='/'">#}
-{#            <img src="../static/logo.png" alt="">#}
-{#        </div>#}
-{#        <br>#}
-{#    <br>#}
-{#        {% if user_info %}#}
-{#        <div>안녕하세요 {{ user_info.username }}님!</div>#}
-{#        {% endif %}#}
-{##}
-{#        <br>#}
-{##}
-{#        <button onclick="window.location.href='/getcard?type_give=coin'">coin</button>#}
-{#        <button onclick="window.location.href='/getcard?type_give=stock'">stock</button>#}
-{##}
-{#        {% if user_info %}#}
-{#            <button onclick="sign_out()">로그아웃</button>#}
-{#        {% else %}#}
-{#            <button onclick="window.location.href='/login'">로그인/회원가입</button>#}
-{#        {% endif %}#}
-{#    </div>#}
-
 
     <div class="wrap">
-
         <div class="container">
+{#            로그인 정보 있으면 sign out -> function signout 연결, 없으면 sign in #}
             <div class="login">
-                <a href="/login" style="color: white; text-decoration:none;">sign in / sign up</a>
+                {% if user_info %}
+                    <a onclick="sign_out()" style="color: white; text-decoration:none;">sign out</a>
+                {% else %}
+                    <a href="/login" style="color: white; text-decoration:none;">sign in / sign up</a>
+                {% endif %}
             </div>
 
             <div class="login2">
                 <a style="color: white; text-decoration:none;">01</a>
+            </div>
 
+            <div class="login3">
+                <a style="color: white; text-decoration:none;">team4 project</a>
+            </div>
+
+            <div class="login4">
+                <a style="color: white; text-decoration:none;">posting review website</a>
             </div>
 
             <div class="container_body">
@@ -197,16 +213,17 @@
                             It has roots in a piece of classical Latin literature from 45 BC,
                             making it over 2000 years old.
                         </p>
-                        <p style="color: #DBFC52">more details -></p>
+                        <a style="" href="https://www.notion.so/1bc12bb63a19400ba3d413dfbb58f523">more details -></a>
+{#                        <p style="color: #DBFC52">more details -></p>#}
                     </section>
                 </div>
 
                 <section class="section2">
 
-                    <div class="coin">
+                    <div onclick="window.location.href='/getcard?type_give=coin'" class="coin">
                     </div>
                     <div class="line"></div>
-                    <div class="stcok">
+                    <div onclick="window.location.href='/getcard?type_give=stock'" class="stcok">
                     </div>
 
                 </section>
