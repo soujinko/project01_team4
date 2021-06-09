@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 SECRET_KEY = 'SPARTA'
-client = MongoClient('', 27017, username="test", password="test")
+client = MongoClient('52.78.209.2', 27017, username="test", password="test")
 db = client.dbsparta_week1
 
 # 메인페이지
@@ -16,7 +16,7 @@ db = client.dbsparta_week1
 def main():
     token_receive = request.cookies.get('mytoken')
     if token_receive is None:
-        return render_template('main.html')
+        return render_template("main.html")
     else:
         try:
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -90,20 +90,14 @@ def get_card():
             result = list(db.applist.find({'type': '증권'}, {'_id': False}))
             return render_template("index.html", result=result)
 
-# 디테일 페이지 1개카드 세부정보 찾기 (엑셀정보 내용, 리뷰,별점)
+
+#리뷰정보 불러오기
 @app.route('/detail_get_card', methods=['POST'])
 def detail_get_card():
-     return jsonify({"result": "success"})
-
-# 리뷰, 별점 저장 (리뷰용 별도 db에 리뷰, 별점, 해당앱 이름, 아이디 저장)
-@app.route('/post_review', methods=['POST'])
-def post_review():
-    return jsonify({"result": "success"})
-
-# 리뷰, 별점 삭제
-@app.route('/delete_review', methods=['POST'])
-def delete_review():
-    return jsonify({"result": "success"})
+    title_receive = request.form['title_give']
+    reviews = list(db.review.find({'app_name':title_receive},{'_id':False}))
+    print(reviews)
+    return jsonify({"result": "success", "reviews": reviews})
 
 
 if __name__ == '__main__':
