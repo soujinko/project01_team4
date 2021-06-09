@@ -9,10 +9,11 @@ db = client.dbsparta_week1
 star = db.applist.find_one({'app_name':'교보증권'})['star'] # 기존 별점
 new_star = 4 # 새로 받아온 별점 합계
 update_star = star + new_star
-db.applist.update_one({'app_name':'나무'},{'$set':{'star':update_star}}) # 별점 업데이트
+db.applist.update_one({'app_name':'코인빗'},{'$set':{'star':13}}) # 별점 업데이트
 
 
 
 # 인덱스html 로그인시 불러올 코드
-bestapps = list(db.applist.find({}).sort("star", -1).limit(3)) # 별점 높은순으로 3개 불러오기
-print(bestapps)
+bestapps = list(db.applist.find({'type':'코인거래소'}).sort("star", -1).limit(3)) # 코인 별점 높은순으로 3개 불러오기
+bestapps = list(db.applist.find({'type':'증권'}).sort("star", -1).limit(3)) # 증권 별점 높은순으로 3개 불러오기
+
