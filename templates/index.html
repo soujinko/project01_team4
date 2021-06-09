@@ -27,6 +27,21 @@
             window.location.href='/login'
             return
         }
+
+        {##리뷰정보 불러오기#}
+        function getreview(appname){
+            console.log(appname)
+            $.ajax({
+                type: "POST",
+                url: "/detail_get_card",
+                data: {title_give: appname},
+                success: function (response) { // 성공하면
+                    let reviews = response['reviews']
+                    console.log(reviews)
+
+                }
+            })
+        }
     </script>
     <style>
         html, body {
@@ -48,7 +63,7 @@
     <body>
 
         <div class="logo" onclick="window.location.href='/'">
-            <img src="../static/logo.png" alt="">
+            <img src="../static/logo2.png" alt="">
         </div>
 
         <br>
@@ -61,7 +76,9 @@
         {% endif %}
         <div>
             {% for i in result %}
-            <div style="border: 2px solid; margin: 20px; width: 300px; padding: ">
+
+                 {#리뷰정보 불러오기#}
+            <div onclick="getreview('{{ i.app_name }}')" style="border: 2px solid; margin: 20px; width: 300px; padding: ">
                 {% if i.type == '코인거래소' %}
                 <img src="{{ i.image_url }}" alt="dd" >
                 {% else %}
