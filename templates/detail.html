@@ -133,6 +133,10 @@
               z-index: 1;
           }
 
+          .signin:hover {
+              border-bottom: 2px solid #DBFC52;
+          }
+
           .user {
               display: inline-block;
               margin-right: 25px;
@@ -217,7 +221,7 @@
                     </div>
 
                 {% else %}
-                    <a href="/login" style="color: white; text-decoration:none;">sign in / sign up</a>
+                    <a href="/login" class="signin" style="color: white; text-decoration:none;">sign in / sign up</a>
                 {% endif %}
             </div>
         </div>

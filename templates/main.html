@@ -4,8 +4,8 @@
     <title>STOCKCOIN</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
-    <meta property="og:title" content="스위터 - 세상을 달달하게"/>
-    <meta property="og:description" content="mini project for Web Plus"/>
+    <meta property="og:title" content="STOCKCOIN"/>
+    <meta property="og:description" content="내게 필요한 주식, 코인 앱 정보를 한눈에"/>
     <meta property="og:image" content="{{ url_for('static', filename='ogimg.png') }}"/>
 
     <!-- Required meta tags -->
@@ -16,6 +16,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <!-- Font Awesome CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+      <!-- google font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -28,6 +31,9 @@
             }
     </script>
     <style>
+        * {
+            font-family: 'Nanum Gothic', sans-serif;
+        }
         html , body {
             margin: 0;
             padding: 0;
@@ -52,10 +58,7 @@
             border: 0px solid red;
             box-sizing: border-box;
             display: table-cell;
-
-
         }
-
         .login {
             position: absolute;
             right: 15px;
@@ -63,13 +66,32 @@
             z-index: 1;
             top: 8px;
         }
-        .login:hover {
-            position: absolute;
-            right: 15px;
-            top: 8px;
+        .signin:hover {
+            border-bottom: 2px solid #DBFC52;
+        }
+        .user {
+            display: inline-block;
+            margin-right: 25px;
+            z-index: 1;
+            font-size: 15px;
+        }
+        .user:hover {
+            display: inline-block;
+            margin-right: 25px;
+            z-index: 1;
             font-size: 15px;
             border-bottom: 2px solid #DBFC52;
+        }
+        .signout {
+            display: inline-block;
             z-index: 1;
+            font-size: 15px;
+        }
+        .signout:hover {
+            display: inline-block;
+            z-index: 1;
+            font-size: 15px;
+            border-bottom: 2px solid #DBFC52;
         }
 
         .login2  {
@@ -183,11 +205,20 @@
     <div class="wrap">
         <div class="container">
 {#            로그인 정보 있으면 sign out -> function signout 연결, 없으면 sign in #}
+
             <div class="login">
                 {% if user_info %}
-                    <a onclick="sign_out()" style="color: white; text-decoration:none;">sign out</a>
+                    <div style="" class="user">
+                        <a onclick="window.location.href='/user/{{ user_info.username }}'"
+                           style="color: white; text-decoration:none;">-> {{ user_info.username }}  </a>
+                    </div>
+
+                    <div style="display: inline-block" class="signout">
+                        <a onclick="sign_out()" style="color: white; text-decoration:none;">sign out</a>
+                    </div>
+
                 {% else %}
-                    <a href="/login" style="color: white; text-decoration:none;">sign in / sign up</a>
+                    <a href="/login" class="signin" style="color: white; text-decoration:none;">sign in / sign up</a>
                 {% endif %}
             </div>
 
@@ -209,9 +240,8 @@
                     <section>
                         <div class="logo">
                         </div>
-                        <p style="color: white">Contrary to popular belief, Lorem Ipsum is not simply random text.
-                            It has roots in a piece of classical Latin literature from 45 BC,
-                            making it over 2000 years old.
+                        <p style="color: white; font-size: 13px; margin-top: 20px">나에게 필요한 주식, 코인 앱이 한눈에 <br>
+                            지금 바로 회원가입 후 금주의 베스트 앱을 확인하세요!
                         </p>
                         <a style="" href="https://www.notion.so/1bc12bb63a19400ba3d413dfbb58f523">more details -></a>
 {#                        <p style="color: #DBFC52">more details -></p>#}

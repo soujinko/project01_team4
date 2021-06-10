@@ -99,7 +99,9 @@
              font-size: 15px;
              z-index: 1;
          }
-
+        .signin:hover {
+            border-bottom: 2px solid #DBFC52;
+        }
 
 
         .user {
@@ -159,7 +161,6 @@
     </head>
     <body>
 
-
         <div class="nav">
             <div class="logo" onclick="window.location.href='/'">
                 <img src="../static/logo2.png" alt="">
@@ -177,7 +178,7 @@
                     </div>
 
                 {% else %}
-                    <a href="/login" style="color: white; text-decoration:none;">sign in / sign up</a>
+                    <a href="/login" class="signin" style="color: white; text-decoration:none;">sign in / sign up</a>
                 {% endif %}
             </div>
         </div>
