@@ -58,22 +58,37 @@
             let star2 = $('#select2').val()
             let star3 = $('#select3').val()
 
-            $.ajax({
-                type: "POST",
-                url: "/review",
-                data: {
-                    username_give: username,
-                    appname_give: appname,
-                    comment_give: comment,
-                    star1_give: star1,
-                    star2_give: star2,
-                    star3_give: star3
-                },
-                success: function (response) { // 성공하면
-                    alert(response["msg"]);
-                    window.location.reload()
+            if(comment.length == 0){
+                    alert("리뷰를 작성해 주세요.");
+                    $("post-comment").focus();
+                    return false;
+            }
+            if(star1 == '' | star2 == '' |star3 == '' ){
+                    alert("빠진 점수가 있습니다.");
+                    $("post-comment").focus();
+                    return false;
+            }
+
+            else{
+                $.ajax({
+                    type: "POST",
+                    url: "/review",
+                    data: {
+                        username_give: username,
+                        appname_give: appname,
+                        comment_give: comment,
+                        star1_give: star1,
+                        star2_give: star2,
+                        star3_give: star3
+                    },
+                    success: function (response) { // 성공하면
+                        alert(response["msg"]);
+                        window.location.reload()
                 }
             })
+
+
+            }
         }
 
         function openClose(user_name) {
@@ -83,10 +98,10 @@
             }
             if ($("#post-box").css("display") == "none") {
                 $("#post-box").show();
-                $("#btn-post-box").text("리뷰작성닫기");
+                $("#reviewbtn").hide();
+
             } else {
                 $("#post-box").hide();
-                $("#btn-post-box").text("리뷰작성하기");
             }
         }
 
@@ -174,31 +189,120 @@
         }
          button:hover {
             width: 30%;
-            background-color: #DBFC52;
-            border: 0px solid;
-            border-radius: 0;
-            color: black;
             padding:  10px;
             text-weight: 2px border;
+            margin: 0px 0px 10px 0px;
+            background-color: #DBFC52;
+            color: black;
         }
 
-    .card-one {
-        border: 2px solid;
-        margin: 30px auto;
-        padding: 20px;
-        width: 90%;
-        background-color: white;
-
-    }
-     .card {
+        .card-one {
+            border: 2px solid;
+            margin: 25px auto;
+            padding: 40px 60px;
+            width: 80%;
             background-color: white;
-            padding: 15px;
-            box-sizing: border-box;
-            border-radius: 0;
+            text-align: center;
 
+
+        }
+         .card {
+                background-color: white;
+                padding: 15px;
+                box-sizing: border-box;
+                border-radius: 0;
+                width: 300px;
+                margin: 0px auto 0px auto;
+            }
+         #post-box {
+            width: 700px;
+            margin: 10px auto;
+            padding: 20px;
+        }
+
+        button:focus{
+            border: none;
+            outline:none;
+        }
+        a{
+            text-decoration:none !important ;
+            color :#DBFC52;
+        }
+        a:hover {
+            text-decoration:none !important;
+            color: black;
+        }
+        .tablebar{
+            width: 80%;
+            font-size: 20px;
+            margin: 50px auto;
+        }
+        .col{
+            width: 300px;
+        }
+        th{
+            text-align: center;
+            font-size: 13px;
+            padding: 10px;
+        }
+
+        td{
+            font-size: 13px;
+            padding: 10px;
+        }
+        table {
+            font-size: 13px;
+            text-align: center;
+            width: 650px;
+            margin: 20px auto;
+        }
+
+        .comment{
+            padding: 5px;
+        }
+        tr{
+            margin: 5px auto;
+        }
+        textarea{
+            padding: 20px 15px;
+            width: 90%;
+        }
+        .parent{
+            padding: 3px;
         }
 
 
+        .first {
+            float: left;
+            width:30%;
+            box-sizing: border-box;
+        }
+
+        .second{
+            float: left;
+            margin-left: 5%;
+            width:30%;
+            box-sizing: border-box;
+        }
+
+        .third{
+            float: right;
+            width:30%;
+            box-sizing: border-box;
+        }
+        .reviewbtn{
+            margin-top: 25px;
+        }
+        .reviewbtn:hover{
+            margin-top: 25px;
+        }
+        #title {
+            color: black;
+        }
+        #title:hover {
+            color: black;
+            border-bottom: 2px solid black;
+        }
     </style>
 
     </head>
@@ -236,23 +340,19 @@
 {#부트스트랩 #}
 <div class="container"  style="justify-content: center; padding-top: 30px;">
 
-    <div style="width: 250px; margin: 0px auto 0px auto;" class="card">
+    <div class="card">
         <img class="card-img-top" src="{{ result.image_url }}" alt="Card image cap">
         <div class="card-body">
-            <h5 class="card-title" style="font-size: 17px; font-weight: bold">{{ result.app_name }}</h5>
-            <p class="card-text" style="font-size: 13px;">{{ result.company }}</p>
-            {% if  star4 %}
+            <h5 class="card-title" style="font-size: 18px; font-weight: bold"><a href="{{ result.google_url }}" id="title">{{ result.app_name }}</a></h5>
+            <p class="card-text" style="font-size: 15px;">{{ result.company }}</p>
             <p class="card-text" style="font-size: 13px;">보안: {{ star1 }} / 접근성: {{ star2 }} / 디자인: {{ star3 }} <br> 총점: {{ star4 }}</p>
-            {% else %}
-            <p class="card-text" style="font-size: 13px;">앱을 평가해 주세요!</p>
-            {% endif %}
 
         </div>
     </div>
 
-
-        <table class="table" style="font-size: 13px; margin-top: 30px; text-align: center">
-            <thead style="background-color: #DBFC52; white-space:nowrap;">
+    <div class="tablebar" >
+        <table>
+            <thead style="; padding: 5px; background-color: #DBFC52; white-space:nowrap;">
             <tr >
                 <th scope="col">ID</th>
                 <th class="col" scope="col">코멘트</th>
@@ -265,7 +365,7 @@
             <tbody>
             {% for i in result2 %}
             <tr>
-                <th scope="row">{{ i.username }}</th>
+                <td>{{ i.username }}</td>
                 <td>{{ i.comment }}</td>
                 <td>{{ i.star1 }}</td>
                 <td>{{ i.star2 }}</td>
@@ -277,63 +377,76 @@
 
             </tbody>
         </table>
+    </div>
 
-{% if user_info %}
-    <button type="button" class="buttonwrap" onclick="openClose('{{ user_info.username }}')">리뷰작성하기</button>
-{% else %}
-<button type="button" class="buttonwrap" onclick="alert('로그인 후 작성해 주세요')">리뷰작성하기</button>
-{% endif %}
 </div>
+
+    <div class="reviewbtn_wrap">
+    <div class="reviewbtn_wrap">
+        {% if user_info %}
+            <a href="#target"><button type="button" class="buttonwrap" id="reviewbtn" onclick="openClose('{{ user_info.username }}')">리뷰작성하기</button></a>
+        {% else %}
+            <a href="#target"><button type="button" class="buttonwrap" id="reviewbtn" onclick="alert('로그인 후 작성해 주세요')">리뷰작성하기</button></a>
+        {% endif %}
+    </div>
 
 {% if user_info %}
 
     <div id="post-box" style="display:none">
         <div class="comment">
             <br>
-            <a>리뷰 코멘트</a>
+            <a style="font-size: 20px; -webkit-text-stroke: 0.8px black; margin: 10px; ">리뷰작성</a>
             <br>
-            <textarea id="post-comment" class="form-control" rows="4"></textarea>
+            <textarea id="post-comment" style="margin: 10px auto;" class="form-control" rows="4"></textarea>
         </div>
 
-        <div class="left">
-            만족도
-            <select id="select1">
+    <div class="parent">
+
+        <div class="input-group mb-3 first" >
+            <div class="input-group-prepend" >
+                <label class="input-group-text">  보안  </label>
+            </div>
+            <select id="select1" class="custom-select">
+                <option value="" selected disable hidden> -- 평점 --</option>
                 <option value="1">1점</option>
                 <option value="2">2점</option>
                 <option value="3">3점</option>
                 <option value="4">4점</option>
-                <option value="5" selected>5점</option>
+                <option value="5">5점</option>
             </select>
+        </div>
 
-            <br>
-            <br>
-            실용성
-            <select class="form-select group" id="select2" aria-label="Default select example"
-                    style="display: initial">
+        <div class="input-group mb-3 second">
+            <div class="input-group-prepend">
+                <label class="input-group-text" >실용성</label>
+            </div>
+            <select id="select2" class="custom-select">
+                <option value="" selected disable hidden>-- 평점 --</option>
                 <option value="1">1점</option>
                 <option value="2">2점</option>
                 <option value="3">3점</option>
                 <option value="4">4점</option>
-                <option value="5" selected>5점</option>
+                <option value="5">5점</option>
             </select>
-
-            <br>
-            <br>
-
         </div>
-        <div class="right">
-            접근성
-            <select class="form-select group" id="select3" aria-label="Default select example"
-                    style="display: initial">
+
+
+        <div class="input-group mb-3 third">
+            <div class="input-group-prepend">
+                <label class="input-group-text" >디자인</label>
+            </div>
+            <select id="select3" class="custom-select">
+                <option value="" selected disable hidden>-- 평점 --</option>
                 <option value="1">1점</option>
                 <option value="2">2점</option>
                 <option value="3">3점</option>
                 <option value="4">4점</option>
-                <option value="5" selected>5점</option>
+                <option value="5">5점</option>
             </select>
-
         </div>
-        <button type="button" class="reviewbtn" onclick="postReview('{{ user_info.username }}')">리뷰저장</button>
+    </div>
+
+        <button type="button" class="reviewbtn" onclick="postReview('{{ user_info.username }}')"><a name="target">리뷰저장</a></button>
     </div>
 {% endif %}
 
