@@ -129,12 +129,12 @@
             border-bottom: 2px solid #DBFC52;
         }
 
-
         .card {
             background-color: white;
             padding: 15px;
             box-sizing: border-box;
             border-radius: 0;
+
 
         }
         .card:hover {
@@ -146,13 +146,19 @@
         }
 
         .wrap {
-            margin: 80px auto 0 auto;
+            margin: 100px auto 0 auto;
             width: 80%;
-            border: 1px solid red;
-            box-sizing: border-box;
+            {#border: 4px solid red;#}
 
         }
-
+            .cards-box {
+            display: flex;
+            /*justify-content: space-between;*/
+            margin: 0 70px;
+            margin-top: 65px;
+            flex-wrap: wrap;
+            float: left;
+        }
 
 
 
@@ -185,49 +191,58 @@
 
 
         <div class="wrap">
+
             {% if user_info %}
                 <div class="userbox">
-                    <div style="color: white; text-align: center">{{ user_info.username }}님, 금주 top3 앱입니다!</div>
+                    <div style="color: white;">{{ user_info.username }}님, 금주 top3 {{ type }} 앱입니다!</div>
 
-                    <div style="margin-top: 30px" class="card-columns">
+                    <div style="margin-top: 30px" class="card-columns cards-box">
                         {% for i in bestapps %}
-                            <div style="width: 250px; height: 330px; " class="card"
-                                 onclick="window.location.href='/get_detail_Test?type_give={{ i.app_name }}'">
-                                <img class="card-img-top" src="{{ i.image_url }}" alt="Card image cap">
-                                <div class="card-body">
-                                    <h5 class="card-title" style="font-size: 17px; font-weight: bold">{{ i.app_name }}</h5>
-                                    {% if i.star_avg %}
-                                        <p class="card-text" style="font-size: 13px;">평점: {{ i.star_avg }} /
-                                            리뷰: {{ i.review }}</p>
-                                    {% else %}
-                                        <p class="card-text" style="font-size: 13px;">평점: {{ i.review }} /
-                                            리뷰: {{ i.review }}</p>
-                                    {% endif %}
+                            {% if i.star_avg %}
+                                <div style="width: 250px; height: 330px; " class="card "
+                                     onclick="window.location.href='/get_detail_Test?type_give={{ i.app_name }}'">
+                                    <img class="card-img-top" src="{{ i.image_url }}" alt="Card image cap">
+                                    <div class="card-body">
+                                        <h5 class="card-title"
+                                            style="font-size: 17px; font-weight: bold">{{ i.app_name }}</h5>
+                                        {% if i.star_avg %}
+                                            <p class="card-text" style="font-size: 13px;">평점: {{ i.star_avg }} /
+                                                리뷰: {{ i.review }}</p>
+                                        {% else %}
+                                            <p class="card-text" style="font-size: 13px;">평점: {{ i.review }} /
+                                                리뷰: {{ i.review }}</p>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                            </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
                 </div>
+                <hr>
+
             {% endif %}
 
 
-            <div class="card-columns">
-                {% for i in result %}
-                    <div style="width: 250px; height: 330px;" class="card"
-                         onclick="window.location.href='/get_detail_Test?type_give={{ i.app_name }}'">
-                        <img class="card-img-top" src="{{ i.image_url }}" alt="Card image cap">
-                        <div class="card-body">
-                            <h5 class="card-title" style="font-size: 17px; font-weight: bold">{{ i.app_name }}</h5>
-                            {% if i.star_avg %}
-                                <p class="card-text" style="font-size: 13px;">평점: {{ i.star_avg }} /
-                                    리뷰: {{ i.review }}</p>
-                            {% else %}
-                                <p class="card-text" style="font-size: 13px;">평점: {{ i.review }} /
-                                    리뷰: {{ i.review }}</p>
-                            {% endif %}
+
+            <div class="">
+                <div class="card-columns cards-box">
+                    {% for i in result %}
+                        <div style="width: 250px; height: 330px; margin-bottom: 20px" class="card"
+                             onclick="window.location.href='/get_detail_Test?type_give={{ i.app_name }}'">
+                            <img class="card-img-top" src="{{ i.image_url }}" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-size: 17px; font-weight: bold">{{ i.app_name }}</h5>
+                                {% if i.star_avg %}
+                                    <p class="card-text" style="font-size: 13px;">평점: {{ i.star_avg }} /
+                                        리뷰: {{ i.review }}</p>
+                                {% else %}
+                                    <p class="card-text" style="font-size: 13px;">평점: {{ i.review }} /
+                                        리뷰: {{ i.review }}</p>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                </div>
             </div>
 
         </div>
