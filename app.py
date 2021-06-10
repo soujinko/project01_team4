@@ -76,9 +76,33 @@ def get_card():
             if type_receive == "coin":
                 result = list(db.applist.find({'type': '코인거래소'}, {'_id': False}))
                 bestapps = list(db.applist.find({'type': '코인거래소'}).sort("star", -1).limit(3))
+                for i in bestapps:
+                    i['review'] = db.review.count_documents({'app_name': i['app_name']})
+                    if (i['review']):
+                        review = i['review']
+                        star = i['star']
+                        i['star_avg'] = round(star / review, 1)
+                for i in result:
+                    i['review'] = db.review.count_documents({'app_name': i['app_name']})
+                    if (i['review']):
+                        review = i['review']
+                        star = i['star']
+                        i['star_avg'] = round(star / review, 1)
             else:
                 result = list(db.applist.find({'type': '증권'}, {'_id': False}))
                 bestapps = list(db.applist.find({'type': '증권'}).sort("star", -1).limit(3))
+                for i in bestapps:
+                    i['review'] = db.review.count_documents({'app_name': i['app_name']})
+                    if (i['review']):
+                        review = i['review']
+                        star = i['star']
+                        i['star_avg'] = sround(star / review, 1)
+                for i in result:
+                    i['review'] = db.review.count_documents({'app_name': i['app_name']})
+                    if (i['review']):
+                        review = i['review']
+                        star = i['star']
+                        i['star_avg'] = round(star / review,1)
             payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
             user_info = db.users.find_one({'username': payload['id']})
 
@@ -88,19 +112,23 @@ def get_card():
     else:
         if type_receive == "coin":
             result = list(db.applist.find({'type':'코인거래소'},{'_id':False}))
+            for i in result:
+                i['review'] = int(db.review.count_documents({'app_name': i['app_name']}))
+                if (i['review'] ):
+                    review = i['review']
+                    star = i['star']
+                    i['star_avg'] = round(star / review, 1)
             return render_template("index.html", result=result , type=type_receive)
         else:
             result = list(db.applist.find({'type': '증권'}, {'_id': False}))
+            for i in result:
+                i['review'] = db.review.count_documents({'app_name': i['app_name']})
+                if (i['review']):
+                    review = i['review']
+                    star = i['star']
+                    i['star_avg'] = round(star / review, 1)
             return render_template("index.html", result=result , type=type_receive)
 
-#
-# #리뷰정보 불러오기
-# @app.route('/detail_get_card', methods=['POST'])
-# def detail_get_card():
-#     title_receive = request.form['title_give']
-#     reviews = list(db.review.find({'app_name':title_receive},{'_id':False}))
-#     print(reviews)
-#     return jsonify({"result": "success", "reviews": reviews})
 
 # index.html에서 선택한 카드 세부 정보 detail.html에 보내기
 @app.route('/get_detail_Test', methods=['GET'])
@@ -113,17 +141,49 @@ def get_detail_card():
             type_receive = request.args.get('type_give')
             result = db.applist.find_one({'app_name': type_receive})
             result2 = list(db.review.find({'app_name': type_receive}, {'_id': False}))
-            return render_template("detail.html", result=result, result2=result2, user_info=user_info)
+            if result2:
+                count = db.review.count_documents({'app_name': type_receive})
+                print(count)
+                star_1 = 0
+                star_2 = 0
+                star_3 = 0
+                for i in result2:
+                    star_1 += i['star1']
+                    star_2 += i['star2']
+                    star_3 += i['star3']
+                star_4 = star_1 + star_2 + star_3
+                star1 = round(star_1/count, 1)
+                star2 = round(star_2/count, 1)
+                star3 = round(star_3/count, 1)
+                star4 = round(star_4/3/count, 1)
+                return render_template("detail.html", result=result, result2=result2, user_info=user_info, star1=star1, star2=star2, star3=star3, star4=star4 )
+            else:
+                return render_template("detail.html", result=result, result2=result2, user_info=user_info)
         except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
             return redirect(url_for("main"))
     else:
-        try:
-            type_receive = request.args.get('type_give')
-            result = db.applist.find_one({'app_name': type_receive})
-            result2 = list(db.review.find({'app_name': type_receive}, {'_id': False}))
+        type_receive = request.args.get('type_give')
+        result = db.applist.find_one({'app_name': type_receive})
+        result2 = list(db.review.find({'app_name': type_receive}, {'_id': False}))
+        if result2:
+            count = db.review.count_documents({'app_name': type_receive})
+            print(count)
+            star_1 = 0
+            star_2 = 0
+            star_3 = 0
+            for i in result2:
+                star_1 += i['star1']
+                star_2 += i['star2']
+                star_3 += i['star3']
+            star_4 = star_1 + star_2 + star_3
+            star1 = round(star_1 / count, 1)
+            star2 = round(star_2 / count, 1)
+            star3 = round(star_3 / count, 1)
+            star4 = round(star_4 / 3 / count, 1)
+            return render_template("detail.html", result=result, result2=result2, star1=star1,
+                                   star2=star2, star3=star3, star4=star4)
+        else:
             return render_template("detail.html", result=result, result2=result2)
-        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-            return redirect(url_for("main"))
 
 
 #detail.html에서 작성한 리뷰 review DB에 저장
@@ -140,15 +200,14 @@ def write_review():
     star = db.applist.find_one({'app_name': appname_receive})['star']
     new_star = star4 + star
     db.applist.update_one({'app_name': appname_receive}, {'$set': {'star': new_star}})
-    # star_avg = round( (star1+star2+star3+star4)/4 , 1) #user에게 입력 받은 star들 평균 star_avg에 저장
+
     doc={
         'username': username_receive,
         'app_name': appname_receive,
         'comment': comment_receive,
         'star1': star1,
         'star2': star2,
-        'star3': star3,
-
+        'star3': star3
     }
     db.review.insert_one(doc)
     return jsonify({'msg':'저장 완료!'})

@@ -13,6 +13,9 @@
 
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+      <!-- google font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
 
       <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
@@ -34,7 +37,12 @@
 
 
     <script>
-        console.log('{{ result.app_name }}')
+        let users = {{ result2|tojson }};
+        let users_list = [];
+        for (let i = 0; i < users.length; i++) {
+            users_list.push(users[i]['username'])
+        }
+        console.log(users_list)
 
         function sign_out() {
             $.removeCookie('mytoken', {path: '/'});
@@ -42,16 +50,14 @@
             window.location.href = "/login"
         }
 
-        function postReview() {
-            let username = '{{ user_info.username}}'
+        function postReview(user_name) {
+            let username = user_name
             let appname = '{{ result.app_name }}'
             let comment = $('#post-comment').val()
             let star1 = $('#select1').val()
             let star2 = $('#select2').val()
             let star3 = $('#select3').val()
-            let star4 = $('#select4').val()
 
-            console.log(appname, comment, star1, star2, star3, star4, username)
             $.ajax({
                 type: "POST",
                 url: "/review",
@@ -61,8 +67,7 @@
                     comment_give: comment,
                     star1_give: star1,
                     star2_give: star2,
-                    star3_give: star3,
-                    star4_give: star4
+                    star3_give: star3
                 },
                 success: function (response) { // 성공하면
                     alert(response["msg"]);
@@ -71,7 +76,11 @@
             })
         }
 
-        function openClose() {
+        function openClose(user_name) {
+            if (users_list.includes(user_name)) {
+                alert('이미 리뷰를 작성했습니다.')
+                return
+            }
             if ($("#post-box").css("display") == "none") {
                 $("#post-box").show();
                 $("#btn-post-box").text("리뷰작성닫기");
@@ -91,12 +100,11 @@
     </script>
     <style>
           * {
-            font-family: 'Jua', sans-serif;
+            font-family: 'Nanum Gothic', sans-serif;
         }
         html, body {
                 background-color: black;
                 height:100%;
-
             }
 
           .nav {
@@ -151,12 +159,6 @@
             border-bottom: 2px solid #DBFC52;
         }
 
-        {#.buttonwrap{#}
-        {#    width: 60%;#}
-        {#    margin: 3px auto;#}
-        {#    float: right;#}
-        {##}
-        {#}#}
         button {
             width: 30%;
             background-color: black;
@@ -176,22 +178,6 @@
             text-weight: 2px border;
         }
 
-        {#.login {#}
-        {#    position: absolute;#}
-        {#    right: 15px;#}
-        {#    font-size: 15px;#}
-        {#    z-index: 1;#}
-        {#    top: 8px;#}
-        {#}#}
-        {#.login:hover {#}
-        {#    position: absolute;#}
-        {#    right: 15px;#}
-        {#    top: 8px;#}
-        {#    font-size: 15px;#}
-        {#    border-bottom: 2px solid #DBFC52;#}
-        {#    z-index: 1;#}
-        {#}#}
-
     .card-one {
         border: 2px solid;
         margin: 30px auto;
@@ -207,66 +193,7 @@
             border-radius: 0;
 
         }
-{#    .card-table{#}
-{#        margin: 20px auto;#}
-{#    }#}
-{#    .reviews{#}
-{#        width: 60%;#}
-{#        margin: 3px auto;#}
-{#    }#}
-{##}
-{#    #post-box {#}
-{#        width: 700px;#}
-{#        margin: 20px auto;#}
-{#        padding: 50px;#}
-{#    }#}
-{#    img{#}
-{#        border: 1px solid black;#}
-{#    }#}
-{##}
-{#    .img-icon {#}
-{#        width: 200px;#}
-{#        height: 200px;#}
-{#    }#}
-{#    .td1{#}
-{#        width: 100px;#}
-{#        line-height: 180%;#}
-{#        float: left;#}
-{#        font-size: 16px;#}
-{#    }#}
-{#    .td2{#}
-{#        width: 100px;#}
-{#        float: left;#}
-{#        line-height: 180%;#}
-{#        font-size: 16px;#}
-{##}
-{##}
-{#    }#}
-{#    .reviewbar{#}
-{#        margin: 1px auto;#}
-{#        width: 60%;#}
-{#        padding: 4px;#}
-{#        background-color: #DBFC52;#}
-{#        border: 1px solid black;#}
-{#        font-size: 20px;#}
-{#        font-weight: bold;#}
-{#    }#}
-{#    .comment{#}
-{#        margin: 10px;#}
-{#        background-color: #DBFC52;#}
-{#    }#}
-{#    .left {#}
-{#          float: left;#}
-{#          width: 250px;#}
-{#/*          border: 3px solid #73AD21;*/#}
-{#          padding: 10px;#}
-{#        }#}
-{#    .right {#}
-{#          float: right;#}
-{#          width: 250px;#}
-{#/*          border: 3px solid #73AD21;*/#}
-{#          padding: 10px;#}
-{#        }#}
+
 
     </style>
 
@@ -310,7 +237,7 @@
         <div class="card-body">
             <h5 class="card-title" style="font-size: 17px; font-weight: bold">{{ result.app_name }}</h5>
             <p class="card-text" style="font-size: 13px;">{{ result.company }}</p>
-            <p class="card-text" style="font-size: 13px;">보안: 3 / 접근성: 3 / 디자인: 3 <br> 총점: 3</p>
+            <p class="card-text" style="font-size: 13px;">보안: {{ star1 }} / 접근성: {{ star2 }} / 디자인: {{ star3 }} <br> 총점: {{ star4 }}</p>
 
         </div>
     </div>
@@ -330,12 +257,12 @@
             <tbody>
             {% for i in result2 %}
             <tr>
-                <th scope="row">sss123</th>
+                <th scope="row">{{ i.username }}</th>
                 <td>{{ i.comment }}</td>
                 <td>{{ i.star1 }}</td>
                 <td>{{ i.star2 }}</td>
                 <td>{{ i.star3 }}</td>
-                <td>{{ i.star4 }}</td>
+
             </tr>
             {% endfor %}
 
@@ -343,49 +270,14 @@
             </tbody>
         </table>
 
-    <button type="button" class="buttonwrap" onclick="openClose()">리뷰작성하기</button>
-
+{% if user_info %}
+    <button type="button" class="buttonwrap" onclick="openClose('{{ user_info.username }}')">리뷰작성하기</button>
+{% else %}
+<button type="button" class="buttonwrap" onclick="alert('로그인 후 작성해 주세요')">리뷰작성하기</button>
+{% endif %}
 </div>
-{##}
-{##}
-{##}
-{#    <p class="reviewbar">Review List</p>#}
-{#    <div class="reviews">#}
-{#        <table class="table">#}
-{#            <thead>#}
-{#            <tr>#}
-{#                <th scope="col">아이디</th>#}
-{#                <th scope="col">코멘트</th>#}
-{#                <th scope="col">접근성</th>#}
-{#                <th scope="col">보안</th>#}
-{#                <th scope="col">접근성</th>#}
-{#                <th scope="col">디자인</th>#}
-{#            </tr>#}
-{##}
-{##}
-{#            </thead>#}
-{##}
-{#            <tbody id="reviews-box">#}
-{#            {% for i in result2 %}#}
-{#                <tr>#}
-{#                    <td>ID</td>#}
-{#                    <td>{{ i.comment }}</td>#}
-{#                    <td>{{ i.star1 }}</td>#}
-{#                    <td>{{ i.star2 }}</td>#}
-{#                    <td>{{ i.star3 }}</td>#}
-{#                    <td>{{ i.star4 }}</td>#}
-{#                </tr>#}
-{##}
-{#            {% endfor %}#}
-{##}
-{##}
-{#            </tbody>#}
-{#        </table>#}
-{#    </div>#}
-{##}
-{#    <div class="buttonwrap">#}
-{#        <button onclick="openClose()" >리뷰작성하기</button>#}
-{#    </div>#}
+
+{% if user_info %}
 
     <div id="post-box" style="display:none">
         <div class="comment">
@@ -432,22 +324,10 @@
                 <option value="5" selected>5점</option>
             </select>
 
-            <br>
-            <br>
-            디자인
-            <select class="form-select group" id="select4" aria-label="Default select example"
-                    style="display: initial">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5" selected>5점</option>
-            </select>
-            <br>
-            <br>
         </div>
-        <button type="button" class="reviewbtn" onclick="postReview()">리뷰저장</button>
+        <button type="button" class="reviewbtn" onclick="postReview('{{ user_info.username }}')">리뷰저장</button>
     </div>
+{% endif %}
 
 </div>
 
