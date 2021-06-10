@@ -96,7 +96,7 @@ def get_card():
                     if (i['review']):
                         review = i['review']
                         star = i['star']
-                        i['star_avg'] = sround(star / review, 1)
+                        i['star_avg'] = round(star / review, 1)
                 for i in result:
                     i['review'] = db.review.count_documents({'app_name': i['app_name']})
                     if (i['review']):
@@ -221,9 +221,17 @@ def user(username):
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         reviews = list(db.review.find({'username': username},{'_id':False}))
         user_info = db.users.find_one({"username": payload['id']}, {"_id": False})
-        return render_template('user.html', user_info=user_info, reviews=reviews)
+        count = db.review.count_documents({'username': username})
+        return render_template('user.html', user_info=user_info, reviews=reviews, count=count)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("main"))
+
+@app.route('/delete', methods=['POST'])
+def delete():
+    username_receive = request.form['username_give']
+    appname_receive = request.form['appname_give']
+    db.review.delete_one({'username': username_receive, 'app_name':appname_receive})
+    return jsonify({'msg': f'{appname_receive} 리뷰를 삭제했습니다.'})
 
 
 if __name__ == '__main__':
