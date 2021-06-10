@@ -93,14 +93,78 @@ def get_card():
             result = list(db.applist.find({'type': '증권'}, {'_id': False}))
             return render_template("index.html", result=result , type=type_receive)
 
+#
+# #리뷰정보 불러오기
+# @app.route('/detail_get_card', methods=['POST'])
+# def detail_get_card():
+#     title_receive = request.form['title_give']
+#     reviews = list(db.review.find({'app_name':title_receive},{'_id':False}))
+#     print(reviews)
+#     return jsonify({"result": "success", "reviews": reviews})
 
-#리뷰정보 불러오기
-@app.route('/detail_get_card', methods=['POST'])
-def detail_get_card():
-    title_receive = request.form['title_give']
-    reviews = list(db.review.find({'app_name':title_receive},{'_id':False}))
-    print(reviews)
-    return jsonify({"result": "success", "reviews": reviews})
+# index.html에서 선택한 카드 세부 정보 detail.html에 보내기
+@app.route('/get_detail_Test', methods=['GET'])
+def get_detail_card():
+    token_receive = request.cookies.get('mytoken')
+    if token_receive:
+        try:
+            payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+            user_info = db.users.find_one({'username': payload['id']})
+            type_receive = request.args.get('type_give')
+            result = db.applist.find_one({'app_name': type_receive})
+            result2 = list(db.review.find({'app_name': type_receive}, {'_id': False}))
+            return render_template("detail.html", result=result, result2=result2, user_info=user_info)
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for("main"))
+    else:
+        try:
+            type_receive = request.args.get('type_give')
+            result = db.applist.find_one({'app_name': type_receive})
+            result2 = list(db.review.find({'app_name': type_receive}, {'_id': False}))
+            return render_template("detail.html", result=result, result2=result2)
+        except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+            return redirect(url_for("main"))
+
+
+#detail.html에서 작성한 리뷰 review DB에 저장
+@app.route('/review', methods=['POST'])
+def write_review():
+    appname_receive = request.form['appname_give']
+    username_receive = request.form['username_give']
+    comment_receive = request.form['comment_give']
+    star1 = int(request.form['star1_give'])
+    star2 = int(request.form['star2_give'])
+    star3 = int(request.form['star3_give'])
+
+    star4 = (star1 + star2 + star3)/3
+    star = db.applist.find_one({'app_name': appname_receive})['star']
+    new_star = star4 + star
+    db.applist.update_one({'app_name': appname_receive}, {'$set': {'star': new_star}})
+    # star_avg = round( (star1+star2+star3+star4)/4 , 1) #user에게 입력 받은 star들 평균 star_avg에 저장
+    doc={
+        'username': username_receive,
+        'app_name': appname_receive,
+        'comment': comment_receive,
+        'star1': star1,
+        'star2': star2,
+        'star3': star3,
+
+    }
+    db.review.insert_one(doc)
+    return jsonify({'msg':'저장 완료!'})
+
+# 사용자 리뷰 불러오기
+@app.route('/user/<username>')
+def user(username):
+
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        reviews = list(db.review.find({'username': username},{'_id':False}))
+        user_info = db.users.find_one({"username": payload['id']}, {"_id": False})
+        return render_template('user.html', user_info=user_info, reviews=reviews)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("main"))
 
 
 if __name__ == '__main__':
