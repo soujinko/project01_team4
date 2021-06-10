@@ -7,52 +7,49 @@
     <meta property="og:title" content="STOCKCOIN"/>
     <meta property="og:description" content="내게 필요한 주식, 코인 앱 정보를 한눈에"/>
     <meta property="og:image" content="{{ url_for('static', filename='ogimg.png') }}"/>
-
-    <!-- Required meta tags -->
+ <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bulma CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+      <!-- google font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+
+      <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
     <!-- Font Awesome CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- JS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+
     <script>
+        let user = '{{ user_info.username }}'
 
-        {#function review(){#}
-        {#    alert('로그인 해주세요')#}
-        {#    window.location.href='/login'#}
-        {#    return#}
-        {#}#}
-        {##리뷰정보 불러오기#}
-{#        function getreview(appname){#}
-{#            console.log(appname)#}
-{#            $.ajax({#}
-{#                type: "POST",#}
-{#                url: "/detail_get_card",#}
-{#                data: {title_give: appname},#}
-{#                success: function (response) { // 성공하면#}
-{#                    let reviews = response['reviews']#}
-{#                    console.log(reviews)#}
-{##}
-{#                }#}
-{#            })#}
-{#        }#}
         function sign_out() {
-                $.removeCookie('mytoken', {path: '/'});
-                alert('로그아웃 되었습니다.')
-                window.location.href = "/login"
-            }
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃 되었습니다.')
+            window.location.href = "/login"
+        }
 
-        function delete_one(app_name){
-            let username = '{{ user_info.username }}'
+        function delete_one(app){
             $.ajax({
                 type: "POST",
                 url: "/delete",
-                data: {username_give: username, appname_give: app_name},
+                data: { username_give: user, appname_give: app },
                 success: function (response) { // 성공하면
                     alert(response['msg']);
                     window.location.reload()
@@ -60,19 +57,17 @@
             })
         }
 
-
-
-
     </script>
     <style>
-           * {
+        * {
             font-family: 'Nanum Gothic', sans-serif;
         }
-        html, body {
-                background-color: black;
-                height:100%;
 
-            }
+        html, body {
+            background-color: black;
+            height: 100%;
+        }
+
         .nav {
             background-color: black;
             width: 100%;
@@ -85,42 +80,26 @@
             align-items: center;
         }
 
-         .logo {
-             width: 170px;
-             margin-left: 20px;
+        .logo {
+            width: 170px;
+            margin-left: 20px;
 
-         }
-
-
-         .login {
-             position: absolute;
-             right: 15px;
-             top: 25%;
-             font-size: 15px;
-             z-index: 1;
-         }
-         .signin:hover {
-            border-bottom: 2px solid #DBFC52;
         }
 
-        .user {
-            display: inline-block;
-            margin-right: 25px;
-            z-index: 1;
+        .login {
+            position: absolute;
+            right: 15px;
+            top: 25%;
             font-size: 15px;
-        }
-        .user:hover {
-            display: inline-block;
-            margin-right: 25px;
             z-index: 1;
-            font-size: 15px;
-            border-bottom: 2px solid #DBFC52;
         }
+
         .signout {
             display: inline-block;
             z-index: 1;
             font-size: 15px;
         }
+
         .signout:hover {
             display: inline-block;
             z-index: 1;
@@ -129,23 +108,120 @@
         }
 
 
-    </style>
+        .card-one {
+            border: 2px solid;
+            margin: 25px auto;
+            padding: 40px 60px;
+            width: 80%;
+            background-color: white;
+            text-align: center;
 
+
+        }
+
+
+        .tablebar {
+            width: 80%;
+            font-size: 20px;
+            margin: 50px auto;
+        }
+
+        .col {
+            width: 300px;
+        }
+
+        th {
+            text-align: center;
+            font-size: 13px;
+            padding: 10px;
+        }
+
+        td {
+            font-size: 13px;
+            padding: 10px;
+        }
+
+        table {
+            font-size: 13px;
+            text-align: center;
+            width: 650px;
+            margin: 20px auto;
+        }
+
+        tr {
+            margin: 5px auto;
+        }
+
+        textarea {
+            padding: 20px 15px;
+            width: 90%;
+        }
+
+        .goapp {
+            text-decoration: none;
+            color: black;
+        }
+
+        .goapp:hover {
+            text-decoration: none;
+            color: black;
+            border-bottom: 1px solid black;
+        }
+
+        #btn {
+            background-color: black;
+            border: 0px solid;
+            border-radius: 0;
+            color: #DBFC52;
+            padding: 10px;
+            text-weight: 2px border;
+            border-radius: 0;
+            font-size: 10px;
+
+
+        }
+
+        #btn:hover {
+            background-color: #DBFC52;
+            border: 0px solid;
+            border-radius: 0;
+            color: black;
+            padding: 10px;
+            text-weight: 2px border;
+            border-radius: 0;
+            font-size: 10px
+        }
+
+        #btn:focus {
+            border: none;
+            outline: none;
+        }
+
+        p > a {
+            color: black;
+            text-decoration: none;
+        }
+
+        p > a:hover {
+            color: black;
+            text-decoration: none;
+            border-bottom: 1px solid black;
+        }
+
+
+
+    </style>
 
     </head>
     <body>
 
-     <div class="nav">
+        <div class="nav">
             <div class="logo" onclick="window.location.href='/'">
                 <img src="../static/logo2.png" alt="">
             </div>
 
             <div class="login">
                 {% if user_info %}
-                    <div style="" class="user">
-                        <a onclick="window.location.href='/user/{{ user_info.username }}'"
-                           style="color: white; text-decoration:none;">-> {{ user_info.username }} </a>
-                    </div>
 
                     <div style="display: inline-block" class="signout">
                         <a onclick="sign_out()" style="color: white; text-decoration:none;">sign out</a>
@@ -158,35 +234,56 @@
         </div>
 
 
-     <div class="wrap" style="background-color: #DBFC52; margin-top: 100px">
+        {#리뷰정보 불러오기#}
+        <div id="card" class="card-one">
 
-     {% if count %}
-         <div>
-             {{ user_info.username }} 님, 총 {{ count }}개의 앱을 평가했네요!
-         </div>
-     {% endif %}
 
-    <br>
 
-    <div>
-    {% if reviews %}
-        {% for i in reviews %}
-            <div>
+            {#부트스트랩 #}
+            <div class="container" style="justify-content: center; padding-top: 30px;">
 
-                <a href="/get_detail_Test?type_give={{ i.app_name }}">{{ i.app_name }}</a>
-                {{ i.comment }}
-                <button onclick="delete_one('{{ i.app_name }}')">삭제하기</button>
+            {% if count %}
+
+                <div>
+                    <p style="font-weight: bold">{{ user_info.username }}님,</p>
+
+                    <p>총 {{ count }}개의 앱을 평가해 주셨네요!</p>
+                </div>
+
+                <div class="tablebar">
+                    <table>
+                        <thead style=" padding: 5px; background-color: #DBFC52; white-space:nowrap;">
+                        <tr>
+                            <th scope="col">App name</th>
+                            <th class="col" scope="col">코멘트</th>
+                            <th scope="col"></th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for i in reviews %}
+                            <tr>
+                                <td ><a class="goapp" href="/get_detail_Test?type_give={{ i.app_name }}">{{ i.app_name }}</a></td>
+                                <td>{{ i.comment }}</td>
+                            <td><button id="btn" type="button" onclick="delete_one('{{ i.app_name }}')">Delete</button></td>
+
+                            </tr>
+                        {% endfor %}
+
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p style="font-weight: bold">{{ user_info.username }}님, 아직 평가한 앱이 없네요!</p>
+                <br>
+                <p><a href="/">둘러보러 가볼까요? -></a></p>
+            {% endif %}
 
             </div>
-        {% endfor %}
-    {% else %}
-         <a href="/">아직 장성된 리뷰가 없네요 작성하러 가볼까요?</a>
-    {% endif %}
-    </div>
-
-     </div>
 
 
+        </div>
 
     </body>
 </html>
