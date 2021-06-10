@@ -237,7 +237,11 @@
         <div class="card-body">
             <h5 class="card-title" style="font-size: 17px; font-weight: bold">{{ result.app_name }}</h5>
             <p class="card-text" style="font-size: 13px;">{{ result.company }}</p>
+            {% if  star4 %}
             <p class="card-text" style="font-size: 13px;">보안: {{ star1 }} / 접근성: {{ star2 }} / 디자인: {{ star3 }} <br> 총점: {{ star4 }}</p>
+            {% else %}
+            <p class="card-text" style="font-size: 13px;">앱을 평가해 주세요!</p>
+            {% endif %}
 
         </div>
     </div>
