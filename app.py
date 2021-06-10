@@ -230,6 +230,14 @@ def user(username):
 def delete():
     username_receive = request.form['username_give']
     appname_receive = request.form['appname_give']
+
+    review = db.review.find_one({'app_name': appname_receive})
+    star = review['star1'] + review['star2'] + review['star3']
+
+    oldstar = db.applist.find_one({'app_name': appname_receive})['star']
+    newstar = oldstar - star/3
+    db.applist.update_one({'app_name': appname_receive}, {'$set': {'star': newstar}})
+
     db.review.delete_one({'username': username_receive, 'app_name':appname_receive})
     return jsonify({'msg': f'{appname_receive} 리뷰를 삭제했습니다.'})
 
